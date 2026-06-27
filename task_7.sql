@@ -1,15 +1,8 @@
 -- task_7
 
-/* Используем блокировку FOR NO KEY UPDATE, при которой пользователь с FOR KEY SHARE
- сможет читать данные строк, на которые наложена FOR NO KEY UPDATE,
- но никто данные в таблице изменить уже не сможет*/
+/* По умолчанию сработает самая строгая блокировка, поскольку мы делаем команду ALTER*/
 
 BEGIN;
-
-SELECT *
-FROM cafe.managers
-FOR NO KEY UPDATE
-NOWAIT;
 
 ALTER TABLE cafe.managers ADD COLUMN number_of_row serial;
 
