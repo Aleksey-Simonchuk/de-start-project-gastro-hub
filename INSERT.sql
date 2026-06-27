@@ -37,12 +37,15 @@ INSERT INTO cafe.restaurant_manager_work_dates (
 )
 SELECT *
 FROM (
-SELECT
-	ruuid,
-	muuid,
-	min(report_date) OVER (PARTITION BY ruuid, muuid) AS min_date,
-	max(report_date) OVER (PARTITION BY ruuid, muuid) AS max_date
-FROM raw_data.raw_to_cafe_with_uuids
+	SELECT
+		ruuid,
+		muuid,
+		min(report_date) AS min_date,
+		max(report_date) AS max_date
+	FROM raw_data.raw_to_cafe_with_uuids
+	GROUP BY
+		ruuid,
+		muuid
 ) AS sub_query
 GROUP BY ruuid, muuid, min_date, max_date
 ORDER BY ruuid, muuid;
