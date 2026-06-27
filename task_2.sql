@@ -17,13 +17,13 @@ WITH annual_checks AS (
 	) AS s
 		LEFT JOIN cafe.restaurants r
 		USING (restaurant_uuid)
-	ORDER BY cafe_name, YEAR
+	ORDER BY cafe_name
 )
 SELECT
 	year,
 	cafe_name,
 	cafe_type,
 	avg_check AS report_year_avg_check,
-	LAG (avg_check) OVER () AS last_year_avg_check,
+	LAG (avg_check) OVER (PARTITION BY cafe_name ORDER BY year) AS last_year_avg_check,
 	ROUND((1 - avg_check / LAG (avg_check) OVER ()) * 100, 2) AS avg_check_difference_in_percent
 FROM annual_checks;
